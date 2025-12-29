@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_REPO_URL = "https://github.com/chopadevivek07/E-Commerce-Spring-Boot-Application-on-EC2-RDS-Using-Terraform-and-Jenkins.git"
+        TARGET = "ubuntu@13.232.185.76"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git url: "${GITHUB_REPO_URL}", branch: 'main'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'cd JtProject && mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(['node-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no $TARGET "sudo mkdir -p /opt/app"
+                    rsync -avz JtProject/target/*.jar $TARGET:/opt/app/app.jar
+                    ssh $TARGET "sudo systemctl restart ecommerce"
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
