@@ -386,7 +386,7 @@ http://<EC2_PUBLIC_IP>:8080/
 |-----------|-------------|
 | ![App Screenshot](IMG/1.png) | Jenkins Pipeline |
 | ![Terraform Output](IMG/2.png) | Terraform Output |
-| ![Jenkins Pipeline](IMG/3.png) | Github Repo |
+| ![Jenkins Pipeline](IMG/Screenshot%20(998).png) | Github Repo |
 
 
 
